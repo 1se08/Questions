@@ -1,12 +1,11 @@
 # Questions
 
+#I'm building a code to calculate odds ratio using logistic regression in r software
+#I'm wondering how to calculate the standard error of the odds ratio using the coefficients i get from logistic regression
 
-Ask us questions about **anything** related to Open Source! To add your question, create an issue in this repository.
+des <- svydesign(ids=~1, data=d, weights=d$FinalWgt)
+model <- svyglm(formula = smoker ~ sec_family + sec_public + sec_school, subset(des, age %in% c(13, 14, 15) & !is.na(d$smoker)), family = binomial)
 
-Just a few guidelines to remember before you ask a question:
-
-- Ensure your question hasn't already been answered. If it has been answered but does not satisfy you, feel free to comment in the issue and we will re-open it.
-- Use a succinct title and description.
-- If your question has already been asked and answered adequately, please add a thumbs-up (or the emoji of your choice!) to the issue. This helps us in identifying common problems that people usually face.
-- Lastly, be civil and polite. :)
-
+summary_model <- summary(model)
+odds_ratio <- as.data.frame(exp(summary_model$coef[,1]))
+se <- as.data.frame(exp(summary_model$coef[,1]) * summary_model$coef[,2])
